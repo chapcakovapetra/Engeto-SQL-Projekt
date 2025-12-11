@@ -315,7 +315,7 @@ SELECT
 	wage_yoy_pct,
 	diff_pp
 FROM combined
-WHERE diff_pp > 10      -- > 10 procentních bodů
+WHERE diff_pp > 10
 ORDER BY year;
 
 
@@ -329,3 +329,4 @@ SELECT
 	wage_yoy_pct
 FROM v_petra_chapcakova_macro_vs_food_wage
 ORDER BY year;
+
