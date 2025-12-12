@@ -6,6 +6,22 @@ Databáze: `data_academy_2025_04_24`, schéma `data_academy_content`
 
 ---
 
+## Devlog / Patch notes
+
+### 2025-12-12 – Refactor po zpětné vazbě (čitelnost a modularita)
+- Původní odevzdání bylo funkčně správné, ale bylo vytvořeno jako **jeden ucelený SQL skript**, což zhoršovalo přehlednost.
+- Na základě zpětné vazby byl projekt doplněn o **modulární variantu**:
+  - každý `VIEW` má vlastní `.sql` soubor,
+  - vytvoření **primární** a **sekundární** tabulky je oddělené,
+  - analytické dotazy pro **Q1–Q5** jsou rozdělené do samostatných souborů.
+- **Logika výpočtů ani výsledné tabulky se nezměnily** – změna je čistě organizační (struktura kódu).
+
+Repozitář tedy obsahuje:
+- původní “monolit” `petra_chapcakova_project.sql` (spustitelný odshora dolů),
+- složku `sql/` s jednotlivými skripty (doporučeno pro kontrolu/čitelnost).
+
+---
+
 ## 1. Cíl projektu
 
 Cílem projektu je pomocí SQL zjistit, jak se v čase vyvíjí:
@@ -98,11 +114,33 @@ Dotazy využívají výše uvedené pohledy a finální tabulky.
 
 ## 4. Jak skript spustit
 
+### Varianta A (původní monolit)
 1. Připojit se k databázi `data_academy_2025_04_24` (PostgreSQL).  
-2. Ujistit se, že aktivní schéma je `data_academy_content` – na začátku skriptu je příkaz:
+2. Spustit soubor `petra_chapcakova_project.sql` odshora dolů.
 
-   ```sql
-   SET search_path TO data_academy_content;
+### Varianta B (modulární skripty – doporučeno)
+1. Připojit se k databázi `data_academy_2025_04_24` (PostgreSQL).
+2. Postupně spustit soubory ve složce `sql/` v tomto pořadí:
+
+   - `00_setup.sql`
+   - `01_view_payroll_year.sql`
+   - `02_view_price_year.sql`
+   - `03_view_payroll_industry_year.sql`
+   - `04_view_cz_gdp_year.sql`
+   - `10_table_primary_final.sql`
+   - `11_table_secondary_final.sql`
+   - `20_view_food_wage_year.sql`
+   - `21_view_macro_vs_food_wage.sql`
+   - otázky:
+     - `30_q1.sql`
+     - `31_q2.sql`
+     - `32_q3.sql`
+     - `33_q4.sql`
+     - `34_q5.sql`
+
+Pozn.: Každý soubor obsahuje `SET search_path TO data_academy_content;`, takže je možné je spouštět i samostatně.
+
+---
 
 ## Výzkumné otázky a odpovědi
 
