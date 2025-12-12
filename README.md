@@ -138,7 +138,7 @@ Dotazy využívají výše uvedené pohledy a finální tabulky.
      - `33_q4.sql`
      - `34_q5.sql`
 
-Pozn.: Každý soubor obsahuje sql `SET search_path TO data_academy_content;`, takže je možné je spouštět i samostatně.
+Pozn.: Každý soubor obsahuje `SET search_path TO data_academy_content;`, takže je možné je spouštět i samostatně.
 
 ---
 
