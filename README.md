@@ -15,6 +15,7 @@ Databáze: `data_academy_2025_04_24`, schéma `data_academy_content`
   - vytvoření **primární** a **sekundární** tabulky je oddělené,
   - analytické dotazy pro **Q1–Q5** jsou rozdělené do samostatných souborů.
 - **Logika výpočtů ani výsledné tabulky se nezměnily** – změna je čistě organizační (struktura kódu).
+- Úprava `README.md` souboru aby reflektoval přídavky 
 
 Repozitář tedy obsahuje:
 - původní “monolit” `petra_chapcakova_project.sql` (spustitelný odshora dolů),
