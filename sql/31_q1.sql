@@ -12,9 +12,14 @@
 SET search_path TO data_academy_content;
 
 -- Q1a
-    industry_code,
-    industry_name
-FROM v_petra_chapcakova_payroll_industry_year
+WITH trend AS (
+	SELECT *
+	FROM v_petra_chapcakova_payroll_industry_year
+)
+SELECT DISTINCT
+	industry_code,
+	industry_name
+FROM trend
 WHERE wage_yoy_pct < 0
 ORDER BY industry_name;
 
@@ -26,4 +31,5 @@ SELECT
     MAX(wage_yoy_pct) AS max_yoy_pct
 FROM v_petra_chapcakova_payroll_industry_year
 GROUP BY industry_code, industry_name
+
 ORDER BY min_yoy_pct;
