@@ -8,6 +8,13 @@ Databáze: `data_academy_2025_04_24`, schéma `data_academy_content`
 
 ## Devlog / Patch notes
 
+### 2025-12-16 – Úprava dle poslední zpětné vazby (repo bez „monolitu“)
+- Na základě feedbacku byl **odstraněn původní ucelený skript** `petra_chapcakova_project.sql`.
+- Repozitář nyní obsahuje **pouze modulární skripty** (VIEW → tabulky → odvozené VIEW → Q1–Q5).
+- **Logika výpočtů ani výsledky se nemění** – změna je čistě organizační (struktura kódu a způsob odevzdání).
+- `README.md` byl upraven tak, aby popisoval pouze aktuální stav repozitáře.
+
+
 ### 2025-12-12 – Refactor po zpětné vazbě (čitelnost a modularita)
 - Původní odevzdání bylo funkčně správné, ale bylo vytvořeno jako **jeden ucelený SQL skript**, což zhoršovalo přehlednost.
 - Na základě zpětné vazby byl projekt doplněn o **modulární variantu**:
@@ -56,90 +63,40 @@ Pracuji pouze s národními průměry cen (řádky, kde `region_code IS NULL`) a
 
 ---
 
-## 3. Postup zpracování
+## 3. Struktura repozitáře (aktuální)
 
-Celý postup je zapsaný v souboru **`petra_chapcakova_project.sql`**. Skript lze spustit odshora dolů; provede následující kroky:
+Skripty jsou umístěné přímo v kořeni repozitáře a jsou číslované tak, aby šly spouštět v logickém pořadí:
 
-### 3.1 Pomocné pohledy (VIEW)
+- `10_views_zakladni.sql`
+- `20_tabulka_primary_final.sql`
+- `21_tabulka_secondary_final.sql`
+- `30_views_odvozene.sql`
+- `40_q01_mzdy_odvetvi.sql`
+- `41_q02_kupni_sila_mleko_chleb.sql`
+- `42_q03_nejpomaleji_zdrazujici_potraviny.sql`
+- `43_q04_potraviny_vs_mzdy_10_pb.sql`
+- `44_q05_hdp_vs_mzdy_a_potraviny.sql`
 
-1. `v_petra_chapcakova_payroll_year`  
-   – roční průměrná hrubá mzda za ČR + meziroční změna (`wage_yoy_pct`).
-
-2. `v_petra_chapcakova_price_year`  
-   – roční průměrná cena potravin podle kategorie + meziroční změna (`price_yoy_pct`).
-
-3. `v_petra_chapcakova_payroll_industry_year`  
-   – průměrná hrubá mzda podle odvětví a roku + meziroční změna.
-
-4. `v_petra_chapcakova_cz_gdp_year`  
-   – HDP ČR podle roku, včetně meziroční změny (`gdp_yoy_pct`).
-
-Později, po vytvoření primární tabulky, vznikají ještě:
-
-5. `v_petra_chapcakova_food_wage_year`  
-   – „index cen potravin“ (průměr `price_yoy_pct`) + růst mezd za jednotlivé roky.
-
-6. `v_petra_chapcakova_macro_vs_food_wage`  
-   – spojení růstu HDP, indexu cen potravin a růstu mezd podle roku.
-
-### 3.2 Finální tabulky
-
-1. **Primární tabulka ČR**  
-   `t_petra_chapcakova_project_sql_primary_final`  
-   Obsahuje pro každý rok a potravinovou kategorii:
-
-   - `year` – rok  
-   - `category_code`, `category_name` – kód a název potraviny  
-   - `price_unit` – jednotka (kg, l, ks, …)  
-   - `avg_price` – průměrná cena v daném roce  
-   - `price_yoy_pct` – meziroční změna ceny v %  
-   - `avg_gross_wage` – průměrná hrubá mzda v ČR  
-   - `wage_yoy_pct` – meziroční změna mzdy v %  
-   - `units_from_avg_wage` – kolik jednotek dané potraviny lze koupit za průměrnou mzdu
-
-2. **Sekundární tabulka – evropské státy**  
-   `t_petra_chapcakova_project_sql_secondary_final`  
-   Obsahuje pro evropské země (mimo ČR) v obdobném časovém rozsahu:
-
-   - `country`, `year`  
-   - `gdp`, `gdp_yoy_pct` – HDP a jeho meziroční změna  
-   - `population` – počet obyvatel  
-   - `gini` – GINI koeficient
-
-### 3.3 Analytické dotazy
-
-Ve spodní části skriptu jsou samostatné dotazy (SELECT) pro zodpovězení otázek Q1–Q5.  
-Dotazy využívají výše uvedené pohledy a finální tabulky.
+> Pozn.: Použité číslování (10, 20, 21, 30, 40–44) záměrně nechává „místo“ pro případné doplnění dalších kroků bez přejmenovávání celé sady souborů.
 
 ---
 
-## 4. Jak skript spustit
+## 4. Jak skripty spustit (doporučený postup)
 
-### Varianta A (původní monolit)
-1. Připojit se k databázi `data_academy_2025_04_24` (PostgreSQL).  
-2. Spustit soubor `petra_chapcakova_project.sql` odshora dolů.
-
-### Varianta B (modulární skripty – doporučeno)
 1. Připojit se k databázi `data_academy_2025_04_24` (PostgreSQL).
-2. Postupně spustit soubory ve složce `sql/` v tomto pořadí:
+2. Postupně spustit skripty v tomto pořadí:
 
-   - `00_setup.sql`
-   - `01_view_payroll_year.sql`
-   - `02_view_price_year.sql`
-   - `03_view_payroll_industry_year.sql`
-   - `04_view_cz_gdp_year.sql`
-   - `10_table_primary_final.sql`
-   - `11_table_secondary_final.sql`
-   - `20_view_food_wage_year.sql`
-   - `21_view_macro_vs_food_wage.sql`
-   - otázky:
-     - `30_q1.sql`
-     - `31_q2.sql`
-     - `32_q3.sql`
-     - `33_q4.sql`
-     - `34_q5.sql`
+   1) `10_views_zakladni.sql`  
+   2) `20_tabulka_primary_final.sql`  
+   3) `21_tabulka_secondary_final.sql`  
+   4) `30_views_odvozene.sql`  
+   5) `40_q01_mzdy_odvetvi.sql`  
+   6) `41_q02_kupni_sila_mleko_chleb.sql`  
+   7) `42_q03_nejpomaleji_zdrazujici_potraviny.sql`  
+   8) `43_q04_potraviny_vs_mzdy_10_pb.sql`  
+   9) `44_q05_hdp_vs_mzdy_a_potraviny.sql`
 
-Pozn.: Každý soubor obsahuje `SET search_path TO data_academy_content;`, takže je možné je spouštět i samostatně.
+Pokud je v souborech uvedeno `SET search_path TO data_academy_content;`, je možné je spouštět i samostatně.
 
 ---
 
